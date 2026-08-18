@@ -2,6 +2,12 @@ const WebSocket = require('ws');
 global.WebSocket = WebSocket;
 
 require('dotenv').config();
+const ffmpeg = require('fluent-ffmpeg');
+const ffmpegPath = require('ffmpeg-static');
+if (ffmpegPath) {
+  ffmpeg.setFfmpegPath(ffmpegPath);
+}
+
 const StreamProxy = require('./src/streamProxy');
 const { CHANNELS, findChannel } = require('./src/channels');
 const { fetchLiveMatches } = require('./src/streamResolver');
