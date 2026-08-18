@@ -8,6 +8,7 @@ const { fetchLiveMatches } = require('./src/streamResolver');
 const WorkerStreamer = require('./src/workerStreamer');
 
 // --- Configuration ---
+const PREFIX = process.env.PREFIX || '!';
 const PROXY_PORT = parseInt(process.env.PORT || process.env.PROXY_PORT || '8999', 10);
 const proxy = new StreamProxy(PROXY_PORT);
 
