@@ -293,13 +293,19 @@ function attachCommandListener(activeWorker) {
     }
 
     // --- !kanallar ---
-    if (command === 'kanallar' || command === 'channels') {
+    if (command === 'kanallar' || command === 'channels' || command === 'liste' || command === 'list') {
       if (activeWorker === Object.values(workers)[0]) {
-        let text = '📋 **İzlenebilir Canlı Kanallar (Çoklu Yayın Destekli):**\n\n';
-        CHANNELS.forEach(ch => {
-          text += `${ch.icon} **${ch.name}** — Komut: \`${PREFIX}yayin ${ch.id}\`\n`;
+        let text = '📋 **🏆 CANLI YAYIN & TV KANAL LİSTESİ**\n\n';
+        text += '⚽ **Spor & Canlı Maç Kanalları:**\n';
+        CHANNELS.filter(c => c.category.includes('Spor') || c.category.includes('Maç')).forEach(ch => {
+          text += `• \`${PREFIX}${ch.id}\` ➜ **${ch.name}** *(${ch.category})*\n`;
         });
-        text += `\n💡 *Farklı ses kanallarında aynı anda TRT 1 ve beIN SPORTS yayınlayabilirsiniz!*`;
+        text += '\n📺 **Ulusal & Eğlence Kanalları:**\n';
+        CHANNELS.filter(c => !c.category.includes('Spor') && !c.category.includes('Maç')).forEach(ch => {
+          text += `• \`${PREFIX}${ch.id}\` ➜ **${ch.name}**\n`;
+        });
+        text += `\n💡 *İstediğiniz ses kanalına girip doğrudan komutu yazmanız yeterlidir! (Örn: \`${PREFIX}bein1\` veya \`${PREFIX}ssport\`)*`;
+        text += `\n⏹️ *Durdurmak için: \`${PREFIX}durdur\`*`;
         return safeReply(message, text);
       }
     }
