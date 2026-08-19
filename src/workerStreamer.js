@@ -5,7 +5,12 @@ class WorkerStreamer {
   constructor(name, token, options = {}) {
     this.name = name;
     this.token = token;
-    this.client = new Client({ checkUpdate: false });
+    this.client = new Client({
+      checkUpdate: false,
+      readyStatus: false,
+      syncStatus: false,
+      patchVoice: true
+    });
     this.streamer = new Streamer(this.client);
     this.activeStreamAbortController = null;
     this.activeChannelName = null;
@@ -64,6 +69,9 @@ class WorkerStreamer {
 
   async startStreaming(voiceChannel, streamSourceUrl, title, streamType = 'camera') {
     await this.stopCurrentStream();
+
+    // Humanized jitter delay to prevent instant bot-like triggers
+    await new Promise(r => setTimeout(r, Math.floor(Math.random() * 400) + 300));
 
     console.log(`[🔴 Worker Yayını Başlatılıyor] [${this.name} (${this.client.user.tag})] -> Kanal: ${title} | Ses Odası: ${voiceChannel.name}`);
 
