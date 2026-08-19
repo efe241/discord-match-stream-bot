@@ -149,6 +149,33 @@ function attachCommandListener(activeWorker) {
       } catch (e) {}
     }
 
+    // Direct channel shortcut support (e.g. !trt1, !ssport1, !ssport2, !tabiispor, !tv85, !exxen, !atv, !bein1)
+    const directChannelShortcut = findChannel(command);
+    if (directChannelShortcut && !['kanallar', 'yardim', 'help', 'durum', 'durdur', 'stop', 'cikis', 'ses', 'yayin', 'maclar', 'yayin_link'].includes(command)) {
+      if (!memberVoice) {
+        if (activeWorker === Object.values(workers)[0]) {
+          return safeReply(message, '❌ **Yayını başlatmak için lütfen önce bir ses kanalına katılın!**');
+        }
+        return;
+      }
+      const targetWorker = getWorkerForQuery(directChannelShortcut.id);
+      if (targetWorker !== activeWorker) return;
+
+      const waitMsg = await safeReply(message, `⏳ **${directChannelShortcut.name}** canlı yayını **${memberVoice.name}** odasında açılıyor... *(Hesap: ${targetWorker.client.user.tag})*`);
+      try {
+        let streamSource = directChannelShortcut.directUrl;
+        if (!streamSource) {
+          await proxy.setTargetChannel(directChannelShortcut);
+          streamSource = proxy.getStreamUrl();
+        }
+        await targetWorker.startStreaming(memberVoice, streamSource, directChannelShortcut.name, 'camera');
+        return safeEdit(waitMsg, `🔴 **${directChannelShortcut.name}** yayını **${memberVoice.name}** kanalında başarıyla açıldı! 🎉\n*(Yayınlayan Hesap: ${targetWorker.client.user.tag})*`);
+      } catch (err) {
+        console.error(err);
+        return safeEdit(waitMsg, `❌ **Yayın başlatılamadı:** ${err.message}`);
+      }
+    }
+
     // --- !yayin <kanal/link> ---
     if (command === 'yayin' || command === 'stream' || command === 'mac') {
       const query = args.join(' ');
