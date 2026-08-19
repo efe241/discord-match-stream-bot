@@ -107,6 +107,9 @@ class WorkerStreamer {
       bitrateAudio: this.quality.bitrateAudio,
       includeAudio: true,
       minimizeLatency: true,
+      customHeaders: {
+        'User-Agent': 'VLC/3.0.18 LibVLC/3.0.18'
+      },
       encoder: Encoders.software({
         x264: {
           preset: 'ultrafast',
