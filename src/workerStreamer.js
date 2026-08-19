@@ -33,7 +33,7 @@ class WorkerStreamer {
       width: parseInt(process.env.STREAM_WIDTH || '1280', 10),
       height: parseInt(process.env.STREAM_HEIGHT || '720', 10),
       frameRate: parseInt(process.env.STREAM_FPS || '30', 10),
-      bitrateVideo: parseInt(process.env.STREAM_BITRATE || '1800', 10),
+      bitrateVideo: parseInt(process.env.STREAM_BITRATE || '1500', 10),
       bitrateAudio: parseInt(process.env.STREAM_AUDIO_BITRATE || '96', 10)
     };
   }
@@ -117,14 +117,7 @@ class WorkerStreamer {
         }
       }),
       customFfmpegFlags: [
-        '-r', `${this.quality.frameRate}`,
-        '-g', `${this.quality.frameRate}`,
-        '-keyint_min', `${this.quality.frameRate}`,
-        '-sc_threshold', '0',
-        '-bf', '0',
-        '-maxrate', `${this.quality.bitrateVideo}k`,
-        '-bufsize', `${this.quality.bitrateVideo * 2}k`,
-        '-pix_fmt', 'yuv420p'
+        '-threads', '0'
       ]
     };
 
