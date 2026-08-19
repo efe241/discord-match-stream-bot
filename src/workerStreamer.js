@@ -9,7 +9,18 @@ class WorkerStreamer {
       checkUpdate: false,
       readyStatus: false,
       syncStatus: false,
-      patchVoice: true
+      patchVoice: true,
+      ws: {
+        properties: {
+          os: 'Windows',
+          browser: 'Discord Client',
+          release_channel: 'stable',
+          client_version: '1.0.9175',
+          os_version: '10.0.19045',
+          os_arch: 'x64',
+          system_locale: 'tr-TR'
+        }
+      }
     });
     this.streamer = new Streamer(this.client);
     this.activeStreamAbortController = null;
