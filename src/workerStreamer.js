@@ -78,7 +78,7 @@ class WorkerStreamer {
     this.activeVoiceChannel = null;
   }
 
-  async startStreaming(voiceChannel, streamSourceUrl, title, streamType = 'camera') {
+  async startStreaming(voiceChannel, streamSourceUrl, title, streamType = 'go-live') {
     await this.stopCurrentStream();
 
     // Humanized jitter delay to prevent instant bot-like triggers

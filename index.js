@@ -168,7 +168,7 @@ function attachCommandListener(activeWorker) {
           await proxy.setTargetChannel(directChannelShortcut);
           streamSource = proxy.getStreamUrl();
         }
-        await targetWorker.startStreaming(memberVoice, streamSource, directChannelShortcut.name, 'camera');
+        await targetWorker.startStreaming(memberVoice, streamSource, directChannelShortcut.name, 'go-live');
         return safeEdit(waitMsg, `🔴 **${directChannelShortcut.name}** yayını **${memberVoice.name}** kanalında başarıyla açıldı! 🎉\n*(Yayınlayan Hesap: ${targetWorker.client.user.tag})*`);
       } catch (err) {
         console.error(err);
@@ -217,7 +217,7 @@ function attachCommandListener(activeWorker) {
             streamSource = proxy.getStreamUrl();
           }
 
-          await targetWorker.startStreaming(memberVoice, streamSource, channelObj.name, 'camera');
+          await targetWorker.startStreaming(memberVoice, streamSource, channelObj.name, 'go-live');
           return safeEdit(waitMsg, `🔴 **${channelObj.name}** yayını **${memberVoice.name}** kanalında başarıyla açıldı! 🎉\n*(Yayınlayan Hesap: ${targetWorker.client.user.tag})*`);
         } catch (err) {
           console.error(err);
@@ -241,7 +241,7 @@ function attachCommandListener(activeWorker) {
             await proxy.setTargetCustomUrl(query, 'Canlı Yayın');
             streamSource = proxy.getStreamUrl();
           }
-          await targetWorker.startStreaming(memberVoice, streamSource, title, 'camera');
+          await targetWorker.startStreaming(memberVoice, streamSource, title, 'go-live');
           return safeEdit(waitMsg, `🔴 **${title}** yayını **${memberVoice.name}** kanalında açıldı! 🎉\n*(Hesap: ${targetWorker.client.user.tag})*`);
         } catch (err) {
           return safeEdit(waitMsg, `❌ Hata: ${err.message}`);
@@ -284,7 +284,7 @@ function attachCommandListener(activeWorker) {
           streamSource = proxy.getStreamUrl();
         }
 
-        await targetWorker.startStreaming(memberVoice, streamSource, title, 'camera');
+        await targetWorker.startStreaming(memberVoice, streamSource, title, 'go-live');
         return safeEdit(waitMsg, `🔴 Canlı yayın **${memberVoice.name}** kanalında başarıyla açıldı! 🎉\n• **Kaynak:** \`${streamUrl}\`\n• **Hesap:** ${targetWorker.client.user.tag}`);
       } catch (err) {
         console.error(err);
