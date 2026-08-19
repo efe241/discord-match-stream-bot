@@ -116,13 +116,6 @@ class WorkerStreamer {
           tune: 'zerolatency'
         }
       }),
-      customInputOptions: [
-        '-allowed_extensions', 'ALL',
-        '-reconnect', '1',
-        '-reconnect_at_eof', '1',
-        '-reconnect_streamed', '1',
-        '-reconnect_delay_max', '2'
-      ],
       customFfmpegFlags: [
         '-r', `${this.quality.frameRate}`,
         '-g', `${this.quality.frameRate}`,
@@ -135,26 +128,27 @@ class WorkerStreamer {
       ]
     };
 
-    // Continuous resilient live loop
     (async () => {
-      while (this.activeChannelName) {
-        try {
-          const prep = prepareStream(streamSourceUrl, streamOpts, this.activeStreamAbortController?.signal);
-          this.streamController = prep.controller;
+      try {
+        const prep = prepareStream(streamSourceUrl, streamOpts, this.activeStreamAbortController?.signal);
+        this.streamController = prep.controller;
 
-          await playStream(prep.output, this.streamer, {
-            type: streamType,
-            width: this.quality.width,
-            height: this.quality.height,
-            frameRate: this.quality.frameRate
-          }, this.activeStreamAbortController?.signal);
-        } catch (err) {
-          if (!this.activeChannelName) break;
-          console.log(`[${this.name}] Canlı akış tazeleniyor...`);
-          await new Promise(r => setTimeout(r, 600));
+        await playStream(prep.output, this.streamer, {
+          type: streamType,
+          width: this.quality.width,
+          height: this.quality.height,
+          frameRate: this.quality.frameRate
+        }, this.activeStreamAbortController?.signal);
+      } catch (err) {
+        if (this.activeChannelName) {
+          console.error(`[${this.name}] Yayın hatası:`, err.message);
+        }
+      } finally {
+        if (this.activeChannelName === title) {
+          this.activeChannelName = null;
+          console.log(`[${this.name}] Yayın Sona Erdi: ${title}`);
         }
       }
-      console.log(`[${this.name}] Yayın Sona Erdi: ${title}`);
     })();
   }
 }
